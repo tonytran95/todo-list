@@ -25,7 +25,7 @@
 }
 
 .todo-lists {
-    height: calc(100vh - 8.25rem);
+    height: calc(100vh - 8.4375rem);
     overflow-y: auto;
 }
 
