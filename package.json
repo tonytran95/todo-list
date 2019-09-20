@@ -12,10 +12,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "css-loader": "^3.2.0",
+    "style-loader": "^1.0.0",
     "webpack": "^4.40.1",
     "webpack-cli": "^3.3.8"
   },
   "dependencies": {
-    "date-fns": "^2.2.1"
+    "bootstrap": "^4.3.1",
+    "date-fns": "^2.2.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
   }
 }
