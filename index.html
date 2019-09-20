@@ -6,7 +6,45 @@
         <link type="text/css" rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="container"></div>
+        <header class="navbar navbar-expand navbar-dark bg-primary flex-column flex-md-row todo-navbar">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" class="d-block" viewBox="0 0 32 32" role="img" focusable="false">
+                    <title>Todo List</title>
+                    <path fill="currentColor" d="M5 16.577l2.194-2.195 5.486 5.484L24.804 7.743 27 9.937l-14.32 14.32z"/>
+                </svg>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav">
+                    <li>
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row flex-xl-nowrap">
+                <div class="col-12 col-md-3 col-xl-2 todo-sidebar">
+                    <div class="todo-search">
+                        <button class="btn btn-primary todo-btn-new-list" type="button">
+                            +
+                        </button>
+                        <button class="btn btn-primary todo-btn-new-task" type="button">
+                            +
+                        </button>
+                        <button class="btn btn-primary todo-btn-clear" type="button">
+                            CLEAR
+                        </button>
+                    </div>
+                    <div class="todo-lists"></div>
+                </div>
+                <div class="col-12 col-md-9 col-xl-10 todo-tasks">
+
+                </div>
+            </div>
+        </div>
         <script type="text/javascript" src="main.js"></script>
     </body>
 </html>
