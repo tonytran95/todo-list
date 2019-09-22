@@ -6,42 +6,118 @@
         <link type="text/css" rel="stylesheet" href="style.css">
     </head>
     <body>
-        <header class="navbar navbar-expand navbar-dark bg-primary flex-column flex-md-row todo-navbar">
-            <a class="navbar-brand" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" class="d-block" viewBox="0 0 32 32" role="img" focusable="false">
-                    <title>Todo List</title>
-                    <path fill="currentColor" d="M5 16.577l2.194-2.195 5.486 5.484L24.804 7.743 27 9.937l-14.32 14.32z"/>
+        <header class="navbar navbar-dark bg-primary todo-navbar justify-content-md-center">
+            <a class="navbar-brand d-flex " href="#">Todo List</a>
+            <button class="btn btn-link navbar-toggler d-md-none p-0 ml-3 todo-toggler" type="button" data-toggle="collapse" data-target="#todo-sidebar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img" focusable="false">
+                    <title>Menu</title>
+                    <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/>
                 </svg>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav">
-                    <li>
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                </ul>
-            </div>
         </header>
         <div class="container-fluid">
             <div class="row flex-xl-nowrap">
-                <div class="col-12 col-md-3 col-xl-2 todo-sidebar">
+                <div class="col-12 col-md-4 col-xl-3 todo-sidebar collapse" id="todo-sidebar">
                     <div class="todo-search">
-                        <button class="btn btn-primary todo-btn-new-list" type="button">
-                            +
-                        </button>
-                        <button class="btn btn-primary todo-btn-new-task" type="button">
-                            +
-                        </button>
-                        <button class="btn btn-primary todo-btn-clear" type="button">
-                            CLEAR
-                        </button>
+                        <button class="btn btn-primary todo-btn-list" type="button" data-toggle="modal" data-target="#listModal"></button>
                     </div>
                     <div class="todo-lists"></div>
                 </div>
-                <div class="col-12 col-md-9 col-xl-10 todo-tasks">
-
+                <div class="col-12 col-md-8 col-xl-9 todo-content">
+                    <div class="todo-content-header">
+                        <span class="todo-content-name"></span>
+                        <div class="todo-content-buttons">
+                            <button class="btn btn-primary todo-btn-edit-list" type="button" data-toggle="modal" data-target="#editListModal"></button>
+                            <button class="btn btn-primary todo-btn-task" type="button" data-toggle="modal" data-target="#taskModal"></button>
+                        </div>
+                    </div>
+                    <div class="todo-tasks"></div>
+                </div>
+            </div>
+            <div class="modal fade todo-modal" id="listModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="listModalLongTitle">New List</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label class="modal-form-label">Name: </label>
+                            <input type="text" class="modal-form-input" id="listName"></input>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary todo-btn-save-list" data-dismiss="modal">Create List</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade todo-modal" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="taskModalLongTitle">New Task</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label class="modal-form-label">Description: </label>
+                            <input type="text" class="modal-form-input" id="taskDescription"></input>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary todo-btn-save-task" data-dismiss="modal">Create Task</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade todo-modal" id="editListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editListModalLongTitle">Edit List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="modal-form-label">Name:</label>
+                        <input type="text" class="modal-form-input" id="editListName"></input>
+                    </div>
+                    <div class="modal-footer modal-delete">
+                        <button type="button" class="btn btn-danger todo-btn-delete-list" data-dismiss="modal">Delete</button>
+                        <div class="modal-button-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary todo-btn-save-editted-list" data-dismiss="modal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade todo-modal" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTaskModalLongTitle">Edit Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="modal-form-label">Description:</label>
+                        <input type="text" class="modal-form-input" id="editTaskDescription"></input>
+                    </div>
+                    <div class="modal-footer modal-delete">
+                        <button type="button" class="btn btn-danger todo-btn-delete-task" data-dismiss="modal">Delete</button>
+                        <div class="modal-button-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary todo-btn-save-editted-task" data-dismiss="modal">Save</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
