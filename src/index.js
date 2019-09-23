@@ -2,7 +2,6 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import octicons from 'octicons';
-import { getTime } from 'date-fns';
 import { List } from './modules/lists.js';
 import { Task } from './modules/tasks.js';
 
@@ -16,9 +15,11 @@ Storage.prototype.save = function(lists) {
 
 const controller = (() => {
     let lists = (localStorage.lists) ? localStorage.getLists() : [];
-
     const drawLists = (active = 0) => {
-        if (lists.length === 0) lists.push(new List("New List...", new Date()));
+        if (lists.length === 0) {
+            lists.push(new List("Example List", new Date()));
+            lists[0].tasks.push(new Task('Example Task', new Date()));
+        }
         const listsDiv = document.querySelector('.todo-lists');
         listsDiv.innerHTML = '';
         lists.forEach((list) => {
@@ -126,13 +127,34 @@ const controller = (() => {
         nameInput.placeholder = listName;
     });
 
-    const newListButton = document.querySelector('.todo-btn-list');
-    newListButton.innerHTML += octicons.plus.toSVG({ 'fill': 'currentColor' });
-    const newTaskButton = document.querySelector('.todo-btn-task');
-    newTaskButton.innerHTML = octicons.plus.toSVG({ 'fill': 'currentColor' });
+    const createList = () => {
+        const activeList = document.querySelector('.todo-list.active');
+        const newListNameInput = document.getElementById('newListName');
+        let newListName = newListNameInput.value;
+        const validCheck = newListName.replace(/\s*/, '');
+        if (validCheck === '') newListName = "New List...";
+        const newList = new List(newListName, new Date());
+        lists.push(newList);
+        localStorage.save(lists);
+        newListNameInput.value = '';
+        drawLists(lists.length - 1);
+        drawTasks(lists[lists.length - 1]);
+        $('#todo-sidebar').collapse('hide');
+    }
 
-    const saveEdittedListButton = document.querySelector('.todo-btn-save-editted-list');
-    saveEdittedListButton.addEventListener('click', () => {
+    const createTask = () => {
+        const activeList = document.querySelector('.todo-list.active');
+        let newTaskDescription = document.getElementById('taskDescription').value;
+        const validCheck = newTaskDescription.replace(/\s*/, '');
+        if (validCheck === '') newTaskDescription = "New Task...";
+        const newTask = new Task(newTaskDescription, new Date());
+        lists[activeList.dataset.id].tasks.push(newTask);
+        localStorage.save(lists);
+        document.getElementById('taskDescription').value = '';
+        drawTasks(lists[activeList.dataset.id]);
+    };
+
+    const updateList = () => {
         const activeList = document.querySelector('.todo-list.active');
         let newListName = document.getElementById('editListName').value;
         const validCheck = newListName.replace(/\s*/, '');
@@ -142,10 +164,9 @@ const controller = (() => {
             drawLists(parseInt(activeList.dataset.id));
         }
         document.getElementById('editListName').value = '';
-    });
+    }
 
-    const saveEdittedTaskButton = document.querySelector('.todo-btn-save-editted-task');
-    saveEdittedTaskButton.addEventListener('click', () => {
+    const updateTask = () => {
         const activeList = document.querySelector('.todo-list.active');
         const activeTask = document.querySelector('.todo-task.active');
         let newTaskDescription = document.getElementById('editTaskDescription').value;
@@ -156,68 +177,57 @@ const controller = (() => {
             drawTasks(lists[activeList.dataset.id]);
         }
         document.getElementById('editTaskDescription').value = '';
-    });
+    }
 
-    const saveListButton = document.querySelector('.todo-btn-save-list');
-    saveListButton.addEventListener('click', () => {
-        const activeList = document.querySelector('.todo-list.active');
-        let newListName = document.getElementById('listName').value;
-        const validCheck = newListName.replace(/\s*/, '');
-        if (validCheck === '') newListName = "New List...";
-        const newList = new List(newListName, new Date());
-        lists.push(newList);
-        localStorage.save(lists);
-        document.getElementById('listName').value = '';
-        drawLists(lists.length - 1);
-        drawTasks(lists[lists.length - 1]);
-        $('#todo-sidebar').collapse('hide');
-    });
-
-    const saveTaskButton = document.querySelector('.todo-btn-save-task');
-    saveTaskButton.addEventListener('click', () => {
-        const activeList = document.querySelector('.todo-list.active');
-        let newTaskDescription = document.getElementById('taskDescription').value;
-        const validCheck = newTaskDescription.replace(/\s*/, '');
-        if (validCheck === '') newTaskDescription = "New Task...";
-        const newTask = new Task(newTaskDescription, new Date());
-        lists[activeList.dataset.id].tasks.push(newTask);
-        localStorage.save(lists);
-        document.getElementById('taskDescription').value = '';
-        drawTasks(lists[activeList.dataset.id]);
-    });
-
-    const deleteListButton = document.querySelector('.todo-btn-delete-list');
-    deleteListButton.addEventListener('click', () => {
+    const deleteList = () => {
         const activeList = document.querySelector('.todo-list.active');
         lists.splice(activeList.dataset.id, 1);
         localStorage.save(lists);
         drawLists();
         drawTasks();
-    });
-    const deleteTaskButton = document.querySelector('.todo-btn-delete-task');
-    deleteTaskButton.addEventListener('click', () => {
+    };
+
+    const deleteTask = () => {
         const activeList = document.querySelector('.todo-list.active');
         const activeTask = document.querySelector('.todo-task.active');
         lists[activeList.dataset.id].tasks.splice(activeTask.dataset.id, 1);
         localStorage.save(lists);
-        drawTasks();
-    });
+        drawTasks(lists[activeList.dataset.id]);
+    };
 
-    const todoToggler = document.querySelector('.todo-toggler');
-    todoToggler.addEventListener('click', () => {
+    const scrollToTop = () => {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
-    });
+    }
+
+    const newListButton = document.querySelector('.todo-btn-list');
+    newListButton.innerHTML += octicons.plus.toSVG({ 'fill': 'currentColor' });
+    newListButton.addEventListener('click', createList);
+    const newTaskButton = document.querySelector('.todo-btn-task');
+    newTaskButton.innerHTML = octicons.plus.toSVG({ 'fill': 'currentColor' });
+
+    document.querySelector('.todo-btn-save-task')
+        .addEventListener('click', createTask);
+    document.querySelector('.todo-btn-save-editted-list')
+        .addEventListener('click', updateList);
+    document.querySelector('.todo-btn-save-editted-task')
+        .addEventListener('click', updateTask);
+    document.querySelector('.todo-btn-delete-list')
+        .addEventListener('click', deleteList);
+    document.querySelector('.todo-btn-delete-task')
+        .addEventListener('click', deleteTask);
+    document.querySelector('.todo-toggler')
+        .addEventListener('click', scrollToTop);
 
     drawLists();
 })();
 
 $(document).ready(function() {
-    $('#listModal').on('shown.bs.modal', function() {
-        $('#listName').focus();
-    });
-    $('#listName').on('keyup', function(event) {
-        if (event.keyCode === 13) document.querySelector('.todo-btn-save-list').click();
+    $('#newListName').on('keyup', function(event) {
+        if (event.keyCode === 13) {
+            document.querySelector('.todo-btn-list').click();
+            $('#newListName').blur();
+        }
     });
     $('#taskModal').on('shown.bs.modal', function() {
         $('#taskDescription').focus();

@@ -4,17 +4,8 @@
     box-sizing: border-box;
 }
 
-.no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.todo-navbar {
-    position: sticky!important;
+header.todo-navbar {
+    position: sticky;
     top: 0;
     min-height: 4rem;
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
@@ -22,15 +13,26 @@
 }
 
 .todo-sidebar {
-    position: sticky!important;
+    position: sticky !important;
     top: 4rem;
     height: calc(100vh - 4rem);
     border-right: 1px solid rgba(0,0,0,.1);
 }
 
-.todo-search {
+.todo-sidebar-header {
     border-bottom: 1px solid rgba(0,0,0,.05);
     padding: 1rem 0;
+    display: flex;
+}
+
+#newListName {
+    margin-right: 1rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.todo-btn-list {
+    flex: 0 0 auto;
 }
 
 .todo-lists {
@@ -54,10 +56,6 @@
     border-bottom: 1px solid rgba(0,0,0,.1);
 }
 
-.todo-btn-list {
-    width: 100%;
-}
-
 .todo-list-name {
     flex: 1 1 auto;
     margin-right: 1rem;
@@ -69,7 +67,7 @@
 }
 
 .todo-content-header {
-    position: sticky!important;
+    position: sticky;
     top: 4rem;
     padding: 1rem 0;
     border-bottom: 1px solid rgba(0,123,255,.1);
@@ -121,13 +119,13 @@
     display: flex;
 }
 
-.btn-checked {
-    background-color: #007bff!important;
-    border-color: #007bff!important;
+button.btn-checked {
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
-.btn-unchecked {
-    border-color: #007bff!important;
+button.btn-unchecked {
+    border-color: #007bff;
 }
 
 .todo-task-btn-copy {
@@ -157,14 +155,14 @@
 
 @media only screen and (min-width: 768px) {
     .todo-sidebar {
-        display: block!important;
+        display: block !important;
     }
 }
 
 @media only screen and (max-width: 767.98px) {
     .todo-sidebar {
         height: auto;
-        position: relative!important;
+        position: relative !important;
         top: 0;
         border-right: 0;
         border-bottom: 1px dotted #007bff;
